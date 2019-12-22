@@ -15,14 +15,8 @@ class SubscriberTableSeeder extends Seeder
     {
         DB::table('subscribers')->delete();
 
-        $faker = \Faker\Factory::create();
-
         for ($i = 0; $i < 10; $i++) {
-            Subscriber::create([
-                'email' => $faker->email,
-                'name' => $faker->name,
-                'state' => $faker->randomElement(Subscriber::STATES)
-            ]);
+            factory(Subscriber::class)->create();
         }
     }
 }
