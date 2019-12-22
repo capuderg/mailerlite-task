@@ -23,7 +23,7 @@ class FieldsTableSeeder extends Seeder
         for ($i = 0; $i < 20; $i++) {
             Field::create([
                 'title' => $faker->text(20),
-                'type' => rand(1, 4),
+                'type' => $faker->randomElement(Field::TYPES),
                 'subscriber_id' => $faker->randomElement($subscriberIds),
             ]);
         }

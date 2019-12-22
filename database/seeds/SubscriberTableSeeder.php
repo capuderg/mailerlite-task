@@ -21,6 +21,7 @@ class SubscriberTableSeeder extends Seeder
             Subscriber::create([
                 'email' => $faker->email,
                 'name' => $faker->name,
+                'state' => $faker->randomElement(Subscriber::STATES)
             ]);
         }
     }

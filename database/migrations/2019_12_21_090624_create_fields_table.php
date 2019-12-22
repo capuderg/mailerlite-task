@@ -16,7 +16,7 @@ class CreateFieldsTable extends Migration
         Schema::create('fields', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('title');
-            $table->tinyInteger('type');
+            $table->tinyInteger('type')->default(\App\Field::STRING_TYPE);
             $table->unsignedBigInteger('subscriber_id');
             $table->timestamps();
 
