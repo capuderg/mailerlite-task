@@ -25,7 +25,6 @@ class FieldTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJsonCount(20);
-
     }
 
     public function testGettingExactField()

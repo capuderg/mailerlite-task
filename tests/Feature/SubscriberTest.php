@@ -25,7 +25,6 @@ class SubscriberTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJsonCount(10);
-
     }
 
     public function testGettingExactSubscriber()

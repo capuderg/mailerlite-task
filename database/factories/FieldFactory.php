@@ -4,7 +4,6 @@
 use App\Field;
 use Faker\Generator as Faker;
 
-
 $factory->define(Field::class, function (Faker $faker) {
     $subscriberIds = \App\Subscriber::all()
         ->pluck('id')
