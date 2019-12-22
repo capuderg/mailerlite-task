@@ -34,4 +34,9 @@ class Field extends Model
     {
         return self::TYPES[$value];
     }
+
+    public function setTypeAttribute($value)
+    {
+        $this->attributes['type'] = array_flip(self::TYPES)[$value];
+    }
 }
