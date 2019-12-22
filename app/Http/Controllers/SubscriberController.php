@@ -15,7 +15,7 @@ class SubscriberController extends Controller
      */
     public function index()
     {
-        return Subscriber::all();
+        return Subscriber::with('fields')->get();
     }
 
     /**
