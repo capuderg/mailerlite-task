@@ -22,3 +22,9 @@ Route::get('subscribers/{subscriber}', 'SubscriberController@show');
 Route::post('subscribers', 'SubscriberController@store');
 Route::put('subscribers/{subscriber}', 'SubscriberController@update');
 Route::delete('subscribers/{subscriber}', 'SubscriberController@destroy');
+
+Route::get('fields', 'FieldController@index');
+Route::get('fields/{field}', 'FieldController@show');
+Route::post('subscribers/{subscriber}/fields', 'FieldController@store');
+Route::put('fields/{field}', 'FieldController@update');
+Route::delete('fields/{field}', 'FieldController@destroy');
