@@ -70,7 +70,7 @@ class SubscriberController extends Controller
     {
         $subscriber->delete();
 
-        response()->json(null, 204);
+        return response()->json(null, 204);
     }
 
     /**
