@@ -12,6 +12,8 @@ https://gist.github.com/tadaspaplauskas/28f80efd2324faac05b6503d427cc471
 4. run `vagrant ssh` and then `cd code`, once you are "sshed" into the server
 5. in the server run `php artisan migrate:fresh` and then `php artisan db:seed` in order to get some dummy records in the DB
 6. run `php artisan key:generate`
+7. run `composer install`
+8. run `npm install`
 
 At this point the project should be functioning.
 
