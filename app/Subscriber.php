@@ -8,7 +8,8 @@ class Subscriber extends Model
 {
     protected $fillable = [
         'email',
-        'name'
+        'name',
+        'state',
     ];
 
     // Define the possible states.
@@ -35,5 +36,10 @@ class Subscriber extends Model
     public function getStateAttribute($value)
     {
         return self::STATES[$value];
+    }
+
+    public function setStateAttribute($value)
+    {
+        $this->attributes['state'] = array_flip(self::STATES)[$value];
     }
 }
