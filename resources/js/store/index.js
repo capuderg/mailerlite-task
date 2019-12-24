@@ -1,7 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import VueToast from 'vue-toast-notification'
+import 'vue-toast-notification/dist/index.css'
 
-Vue.use(Vuex);
+Vue.use(Vuex)
+Vue.use(VueToast, {
+    position: 'top',
+    duration: 6000
+})
 
 export default new Vuex.Store({
     state: {
