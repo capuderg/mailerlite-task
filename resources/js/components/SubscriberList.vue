@@ -41,6 +41,11 @@
                                             <td>{{ field.type }}</td>
                                         </tr>
                                     </template>
+                                    <tr>
+                                        <td colspan="3">
+                                            <a href="#" data-toggle="modal" data-target="#addField" @click="createField(subscriber.id)">+ Add a field</a>
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </td>
@@ -50,12 +55,12 @@
             </tbody>
         </table>
 
-        <!-- Modal -->
+        <!-- Subscriber Modal -->
         <div class="modal fade" id="editSubscriber" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Edit Subscriber</h5>
+                        <h5 class="modal-title">Edit Subscriber</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -88,6 +93,38 @@
                 </div>
             </div>
         </div>
+
+        <!-- Field Modal -->
+        <div class="modal fade" id="addField" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Add Field</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="edited-email">Title</label>
+                                <input type="email" class="form-control" id="title" v-model="title" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="edited-state">Type</label>
+                                <select class="form-control" id="type" v-model="type">
+                                    <option v-for="type in possibleTypes">{{ type }}</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" @click.prevent="submitCreateField">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 <script>
@@ -101,10 +138,13 @@
                 editedEmail: '',
                 editedName: '',
                 editedState: '',
+                fieldSubscriberId: 0,
+                title: '',
+                type: 'string'
             }
         },
         computed: {
-            ...mapGetters(['subscribers', 'possibleStates', 'getEditSubscriberErrors'])
+            ...mapGetters(['subscribers', 'possibleStates', 'getEditSubscriberErrors', 'possibleTypes'])
         },
         methods: {
             deleteSubscriber: function (subscriber) {
@@ -119,7 +159,7 @@
             submitEditedSubscriber: function () {
                 this.$store.commit('RESET_EDIT_SUBSCRIBER_ERRORS')
 
-                let data = {
+                const data = {
                     id: this.editedId,
                     email: this.editedEmail,
                     name: this.editedName,
@@ -127,6 +167,18 @@
                 };
 
                 this.$store.dispatch('UPDATE_SUBSCRIBER', data)
+            },
+            createField: function (subscriberId) {
+                this.fieldSubscriberId = subscriberId
+            },
+            submitCreateField: function () {
+                const data = {
+                    subscriber_id: this.fieldSubscriberId,
+                    title: this.title,
+                    type: this.type,
+                };
+
+                this.$store.dispatch('ADD_FIELD', data)
             }
         }
     };

@@ -28,5 +28,14 @@ export default {
     },
     RESET_EDIT_SUBSCRIBER_ERRORS(state) {
         state.editSubscriberErrors = state.defaultSubscriberFields
-    }
+    },
+    ADD_FIELD(state, field) {
+        state.subscribers.map(subscriber => {
+            if (subscriber.id === field.subscriber_id ) {
+                subscriber.fields.push(field)
+            }
+
+            return subscriber
+        })
+    },
 }

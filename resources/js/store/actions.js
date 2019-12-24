@@ -32,5 +32,13 @@ export default {
             Vue.$toast.error(error.response.data.message)
             commit('UPDATE_EDIT_SUBSCRIBER_ERRORS', error.response.data.errors)
         })
-    }
+    },
+    ADD_FIELD({commit}, field) {
+        axios.post(`/api/subscribers/${field.subscriber_id}/fields`, field).then(res => {
+            Vue.$toast.success('Field successfully added!')
+            commit('ADD_FIELD', res.data)
+        }).catch((error) => {
+            Vue.$toast.error(error.response.data.message)
+        })
+    },
 }

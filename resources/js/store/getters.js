@@ -1,10 +1,7 @@
 export default {
-    subscribers: state => {
-        return state.subscribers
-    },
-    possibleStates: state => {
-        return state.possibleStates
-    },
+    subscribers: state => state.subscribers,
+    possibleStates: state => state.possibleStates,
     getAddSubscriberErrors: state => state.addSubscriberErrors,
-    getEditSubscriberErrors: state => state.editSubscriberErrors
+    getEditSubscriberErrors: state => state.editSubscriberErrors,
+    possibleTypes: state => state.possibleTypes,
 }

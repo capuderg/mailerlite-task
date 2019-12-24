@@ -21,5 +21,11 @@ export default {
         'junk',
         'bounced',
         'unconfirmed',
+    ],
+    possibleTypes: [
+        'date',
+        'number',
+        'string',
+        'boolean',
     ]
 }
