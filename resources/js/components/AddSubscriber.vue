@@ -6,7 +6,10 @@
                 <form @submit.prevent="createSubscriber">
                     <div class="form-group">
                         <label for="email">Email address</label>
-                        <input type="email" class="form-control" id="email" v-model="email">
+                        <input type="email" class="form-control" :class="{'is-invalid': getAddSubscriberErrors.email.length}" id="email" v-model="email">
+                        <div class="invalid-feedback" v-if="getAddSubscriberErrors.email.length">
+                            {{ getAddSubscriberErrors.email.join(', ') }}
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="name">Name</label>
@@ -33,19 +36,22 @@
             return {
                 email: '',
                 name: '',
-                state: ''
+                state: 'unconfirmed'
             }
         },
         computed: {
-            ...mapGetters(['possibleStates'])
+            ...mapGetters(['possibleStates', 'getAddSubscriberErrors'])
         },
         methods: {
             createSubscriber: function () {
+                this.$store.commit('RESET_ADD_SUBSCRIBER_ERRORS')
+
                 let data = {
                     email: this.email,
                     name: this.name,
                     state: this.state
-                };
+                }
+
                 this.$store.dispatch('ADD_SUBSCRIBER', data)
             }
         }

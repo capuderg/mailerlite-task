@@ -12,6 +12,11 @@ Vue.use(VueToast, {
 export default new Vuex.Store({
     state: {
         subscribers: [],
+        addSubscriberErrors: {
+            email: '',
+            name: '',
+            state: '',
+        },
         possibleStates: [
             'active',
             'unsubscribed',
@@ -26,7 +31,8 @@ export default new Vuex.Store({
         },
         possibleStates: state => {
             return state.possibleStates
-        }
+        },
+        getAddSubscriberErrors: state => state.addSubscriberErrors
     },
     mutations: {
         ADD_SUBSCRIBER(state, subscriber) {
@@ -46,14 +52,26 @@ export default new Vuex.Store({
 
                 return existingSubscriber
             });
+        },
+        UPDATE_ADD_SUBSCRIBER_ERRORS(state, errors) {
+            state.addSubscriberErrors = errors
+        },
+        RESET_ADD_SUBSCRIBER_ERRORS(state) {
+            state.addSubscriberErrors = {
+                email: '',
+                name: '',
+                state: '',
+            }
         }
     },
     actions: {
         ADD_SUBSCRIBER({commit}, subscriber) {
             axios.post('/api/subscribers', subscriber).then(res => {
                 commit('ADD_SUBSCRIBER', res.data)
-            }).catch(err => {
-                console.log(err)
+            }).catch((error) => {
+                console.log(error.response.data)
+                commit('UPDATE_ADD_SUBSCRIBER_ERRORS', error.response.data.errors)
+                Vue.$toast.error(error.response.data.message)
             })
         },
         GET_SUBSCRIBERS({commit}) {
