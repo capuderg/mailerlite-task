@@ -51904,17 +51904,27 @@ module.exports = function(module) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _components_MailerliteApp__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/MailerliteApp */ "./resources/js/components/MailerliteApp.vue");
-/* harmony import */ var _js_store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../js/store */ "./resources/js/store/index.js");
+/* harmony import */ var vue_toast_notification__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-toast-notification */ "./node_modules/vue-toast-notification/dist/index.min.js");
+/* harmony import */ var vue_toast_notification__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_toast_notification__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _components_MailerliteApp__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/MailerliteApp */ "./resources/js/components/MailerliteApp.vue");
+/* harmony import */ var _js_store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../js/store */ "./resources/js/store/index.js");
+/* harmony import */ var vue_toast_notification_dist_index_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue-toast-notification/dist/index.css */ "./node_modules/vue-toast-notification/dist/index.css");
+/* harmony import */ var vue_toast_notification_dist_index_css__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(vue_toast_notification_dist_index_css__WEBPACK_IMPORTED_MODULE_3__);
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 
 
-Vue.component('mailerlite-app', _components_MailerliteApp__WEBPACK_IMPORTED_MODULE_0__["default"]);
+
+
+Vue.use(vue_toast_notification__WEBPACK_IMPORTED_MODULE_0___default.a, {
+  position: 'top',
+  duration: 6000
+});
+Vue.component('mailerlite-app', _components_MailerliteApp__WEBPACK_IMPORTED_MODULE_1__["default"]);
 var app = new Vue({
   el: '#app',
-  store: _js_store__WEBPACK_IMPORTED_MODULE_1__["default"]
+  store: _js_store__WEBPACK_IMPORTED_MODULE_2__["default"]
 });
 
 /***/ }),
@@ -52164,6 +52174,85 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/store/actions.js":
+/*!***************************************!*\
+  !*** ./resources/js/store/actions.js ***!
+  \***************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  ADD_SUBSCRIBER: function ADD_SUBSCRIBER(_ref, subscriber) {
+    var commit = _ref.commit;
+    axios.post('/api/subscribers', subscriber).then(function (res) {
+      vue__WEBPACK_IMPORTED_MODULE_0___default.a.$toast.success('Subscriber successfully added!');
+      commit('ADD_SUBSCRIBER', res.data);
+    })["catch"](function (error) {
+      vue__WEBPACK_IMPORTED_MODULE_0___default.a.$toast.error(error.response.data.message);
+      commit('UPDATE_ADD_SUBSCRIBER_ERRORS', error.response.data.errors);
+    });
+  },
+  GET_SUBSCRIBERS: function GET_SUBSCRIBERS(_ref2) {
+    var commit = _ref2.commit;
+    axios.get('/api/subscribers').then(function (res) {
+      commit('SET_SUBSCRIBERS', res.data);
+    })["catch"](function (err) {
+      console.log(err);
+    });
+  },
+  DELETE_SUBSCRIBER: function DELETE_SUBSCRIBER(_ref3, subscriber) {
+    var commit = _ref3.commit;
+    axios["delete"]("/api/subscribers/".concat(subscriber.id)).then(function (res) {
+      commit('DELETE_SUBSCRIBER', subscriber);
+    })["catch"](function (err) {
+      console.log(err);
+    });
+  },
+  UPDATE_SUBSCRIBER: function UPDATE_SUBSCRIBER(_ref4, subscriber) {
+    var commit = _ref4.commit;
+    axios.put("/api/subscribers/".concat(subscriber.id), subscriber).then(function (res) {
+      vue__WEBPACK_IMPORTED_MODULE_0___default.a.$toast.success('Subscriber successfully updated!');
+      commit('UPDATE_SUBSCRIBER', res.data);
+    })["catch"](function (error) {
+      vue__WEBPACK_IMPORTED_MODULE_0___default.a.$toast.error(error.response.data.message);
+      commit('UPDATE_EDIT_SUBSCRIBER_ERRORS', error.response.data.errors);
+    });
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/store/getters.js":
+/*!***************************************!*\
+  !*** ./resources/js/store/getters.js ***!
+  \***************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ({
+  subscribers: function subscribers(state) {
+    return state.subscribers;
+  },
+  possibleStates: function possibleStates(state) {
+    return state.possibleStates;
+  },
+  getAddSubscriberErrors: function getAddSubscriberErrors(state) {
+    return state.addSubscriberErrors;
+  },
+  getEditSubscriberErrors: function getEditSubscriberErrors(state) {
+    return state.editSubscriberErrors;
+  }
+});
+
+/***/ }),
+
 /***/ "./resources/js/store/index.js":
 /*!*************************************!*\
   !*** ./resources/js/store/index.js ***!
@@ -52176,124 +52265,98 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var vue_toast_notification__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-toast-notification */ "./node_modules/vue-toast-notification/dist/index.min.js");
-/* harmony import */ var vue_toast_notification__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vue_toast_notification__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var vue_toast_notification_dist_index_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue-toast-notification/dist/index.css */ "./node_modules/vue-toast-notification/dist/index.css");
-/* harmony import */ var vue_toast_notification_dist_index_css__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(vue_toast_notification_dist_index_css__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _state__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./state */ "./resources/js/store/state.js");
+/* harmony import */ var _getters__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./getters */ "./resources/js/store/getters.js");
+/* harmony import */ var _mutations__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./mutations */ "./resources/js/store/mutations.js");
+/* harmony import */ var _actions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./actions */ "./resources/js/store/actions.js");
+
+
 
 
 
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_toast_notification__WEBPACK_IMPORTED_MODULE_2___default.a, {
-  position: 'top',
-  duration: 6000
-});
 /* harmony default export */ __webpack_exports__["default"] = (new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
-  state: {
-    subscribers: [],
-    defaultSubscriberFields: {
-      email: '',
-      name: '',
-      state: ''
-    },
-    addSubscriberErrors: {
-      email: '',
-      name: '',
-      state: ''
-    },
-    editSubscriberErrors: {
-      email: '',
-      name: '',
-      state: ''
-    },
-    possibleStates: ['active', 'unsubscribed', 'junk', 'bounced', 'unconfirmed']
-  },
-  getters: {
-    subscribers: function subscribers(state) {
-      return state.subscribers;
-    },
-    possibleStates: function possibleStates(state) {
-      return state.possibleStates;
-    },
-    getAddSubscriberErrors: function getAddSubscriberErrors(state) {
-      return state.addSubscriberErrors;
-    },
-    getEditSubscriberErrors: function getEditSubscriberErrors(state) {
-      return state.editSubscriberErrors;
-    }
-  },
-  mutations: {
-    ADD_SUBSCRIBER: function ADD_SUBSCRIBER(state, subscriber) {
-      state.subscribers.push(subscriber);
-    },
-    SET_SUBSCRIBERS: function SET_SUBSCRIBERS(state, subscribers) {
-      state.subscribers = subscribers;
-    },
-    DELETE_SUBSCRIBER: function DELETE_SUBSCRIBER(state, subscriber) {
-      state.subscribers.splice(state.subscribers.indexOf(subscriber), 1);
-    },
-    UPDATE_SUBSCRIBER: function UPDATE_SUBSCRIBER(state, subscriber) {
-      state.subscribers.map(function (existingSubscriber) {
-        if (existingSubscriber.id === subscriber.id) {
-          return Object.assign(existingSubscriber, subscriber);
-        }
-
-        return existingSubscriber;
-      });
-    },
-    UPDATE_ADD_SUBSCRIBER_ERRORS: function UPDATE_ADD_SUBSCRIBER_ERRORS(state, errors) {
-      state.addSubscriberErrors = errors;
-    },
-    RESET_ADD_SUBSCRIBER_ERRORS: function RESET_ADD_SUBSCRIBER_ERRORS(state) {
-      state.addSubscriberErrors = state.defaultSubscriberFields;
-    },
-    UPDATE_EDIT_SUBSCRIBER_ERRORS: function UPDATE_EDIT_SUBSCRIBER_ERRORS(state, errors) {
-      state.editSubscriberErrors = errors;
-    },
-    RESET_EDIT_SUBSCRIBER_ERRORS: function RESET_EDIT_SUBSCRIBER_ERRORS(state) {
-      state.editSubscriberErrors = state.defaultSubscriberFields;
-    }
-  },
-  actions: {
-    ADD_SUBSCRIBER: function ADD_SUBSCRIBER(_ref, subscriber) {
-      var commit = _ref.commit;
-      axios.post('/api/subscribers', subscriber).then(function (res) {
-        vue__WEBPACK_IMPORTED_MODULE_0___default.a.$toast.success('Subscriber successfully added!');
-        commit('ADD_SUBSCRIBER', res.data);
-      })["catch"](function (error) {
-        vue__WEBPACK_IMPORTED_MODULE_0___default.a.$toast.error(error.response.data.message);
-        commit('UPDATE_ADD_SUBSCRIBER_ERRORS', error.response.data.errors);
-      });
-    },
-    GET_SUBSCRIBERS: function GET_SUBSCRIBERS(_ref2) {
-      var commit = _ref2.commit;
-      axios.get('/api/subscribers').then(function (res) {
-        commit('SET_SUBSCRIBERS', res.data);
-      })["catch"](function (err) {
-        console.log(err);
-      });
-    },
-    DELETE_SUBSCRIBER: function DELETE_SUBSCRIBER(_ref3, subscriber) {
-      var commit = _ref3.commit;
-      axios["delete"]("/api/subscribers/".concat(subscriber.id)).then(function (res) {
-        commit('DELETE_SUBSCRIBER', subscriber);
-      })["catch"](function (err) {
-        console.log(err);
-      });
-    },
-    UPDATE_SUBSCRIBER: function UPDATE_SUBSCRIBER(_ref4, subscriber) {
-      var commit = _ref4.commit;
-      axios.put("/api/subscribers/".concat(subscriber.id), subscriber).then(function (res) {
-        vue__WEBPACK_IMPORTED_MODULE_0___default.a.$toast.success('Subscriber successfully updated!');
-        commit('UPDATE_SUBSCRIBER', res.data);
-      })["catch"](function (error) {
-        vue__WEBPACK_IMPORTED_MODULE_0___default.a.$toast.error(error.response.data.message);
-        commit('UPDATE_EDIT_SUBSCRIBER_ERRORS', error.response.data.errors);
-      });
-    }
-  }
+  state: _state__WEBPACK_IMPORTED_MODULE_2__["default"],
+  getters: _getters__WEBPACK_IMPORTED_MODULE_3__["default"],
+  mutations: _mutations__WEBPACK_IMPORTED_MODULE_4__["default"],
+  actions: _actions__WEBPACK_IMPORTED_MODULE_5__["default"]
 }));
+
+/***/ }),
+
+/***/ "./resources/js/store/mutations.js":
+/*!*****************************************!*\
+  !*** ./resources/js/store/mutations.js ***!
+  \*****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ({
+  ADD_SUBSCRIBER: function ADD_SUBSCRIBER(state, subscriber) {
+    state.subscribers.push(subscriber);
+  },
+  SET_SUBSCRIBERS: function SET_SUBSCRIBERS(state, subscribers) {
+    state.subscribers = subscribers;
+  },
+  DELETE_SUBSCRIBER: function DELETE_SUBSCRIBER(state, subscriber) {
+    state.subscribers.splice(state.subscribers.indexOf(subscriber), 1);
+  },
+  UPDATE_SUBSCRIBER: function UPDATE_SUBSCRIBER(state, subscriber) {
+    state.subscribers.map(function (existingSubscriber) {
+      if (existingSubscriber.id === subscriber.id) {
+        return Object.assign(existingSubscriber, subscriber);
+      }
+
+      return existingSubscriber;
+    });
+  },
+  UPDATE_ADD_SUBSCRIBER_ERRORS: function UPDATE_ADD_SUBSCRIBER_ERRORS(state, errors) {
+    state.addSubscriberErrors = errors;
+  },
+  RESET_ADD_SUBSCRIBER_ERRORS: function RESET_ADD_SUBSCRIBER_ERRORS(state) {
+    state.addSubscriberErrors = state.defaultSubscriberFields;
+  },
+  UPDATE_EDIT_SUBSCRIBER_ERRORS: function UPDATE_EDIT_SUBSCRIBER_ERRORS(state, errors) {
+    state.editSubscriberErrors = errors;
+  },
+  RESET_EDIT_SUBSCRIBER_ERRORS: function RESET_EDIT_SUBSCRIBER_ERRORS(state) {
+    state.editSubscriberErrors = state.defaultSubscriberFields;
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/store/state.js":
+/*!*************************************!*\
+  !*** ./resources/js/store/state.js ***!
+  \*************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ({
+  subscribers: [],
+  defaultSubscriberFields: {
+    email: '',
+    name: '',
+    state: ''
+  },
+  addSubscriberErrors: {
+    email: '',
+    name: '',
+    state: ''
+  },
+  editSubscriberErrors: {
+    email: '',
+    name: '',
+    state: ''
+  },
+  possibleStates: ['active', 'unsubscribed', 'junk', 'bounced', 'unconfirmed']
+});
 
 /***/ }),
 
