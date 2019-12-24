@@ -12,7 +12,17 @@ Vue.use(VueToast, {
 export default new Vuex.Store({
     state: {
         subscribers: [],
+        defaultSubscriberFields: {
+            email: '',
+            name: '',
+            state: '',
+        },
         addSubscriberErrors: {
+            email: '',
+            name: '',
+            state: '',
+        },
+        editSubscriberErrors: {
             email: '',
             name: '',
             state: '',
@@ -32,7 +42,8 @@ export default new Vuex.Store({
         possibleStates: state => {
             return state.possibleStates
         },
-        getAddSubscriberErrors: state => state.addSubscriberErrors
+        getAddSubscriberErrors: state => state.addSubscriberErrors,
+        getEditSubscriberErrors: state => state.editSubscriberErrors
     },
     mutations: {
         ADD_SUBSCRIBER(state, subscriber) {
@@ -57,21 +68,23 @@ export default new Vuex.Store({
             state.addSubscriberErrors = errors
         },
         RESET_ADD_SUBSCRIBER_ERRORS(state) {
-            state.addSubscriberErrors = {
-                email: '',
-                name: '',
-                state: '',
-            }
+            state.addSubscriberErrors = state.defaultSubscriberFields
+        },
+        UPDATE_EDIT_SUBSCRIBER_ERRORS(state, errors) {
+            state.editSubscriberErrors = errors
+        },
+        RESET_EDIT_SUBSCRIBER_ERRORS(state) {
+            state.editSubscriberErrors = state.defaultSubscriberFields
         }
     },
     actions: {
         ADD_SUBSCRIBER({commit}, subscriber) {
             axios.post('/api/subscribers', subscriber).then(res => {
+                Vue.$toast.success('Subscriber successfully added!')
                 commit('ADD_SUBSCRIBER', res.data)
             }).catch((error) => {
-                console.log(error.response.data)
-                commit('UPDATE_ADD_SUBSCRIBER_ERRORS', error.response.data.errors)
                 Vue.$toast.error(error.response.data.message)
+                commit('UPDATE_ADD_SUBSCRIBER_ERRORS', error.response.data.errors)
             })
         },
         GET_SUBSCRIBERS({commit}) {
@@ -90,9 +103,11 @@ export default new Vuex.Store({
         },
         UPDATE_SUBSCRIBER({commit}, subscriber) {
             axios.put(`/api/subscribers/${subscriber.id}`, subscriber).then(res => {
+                Vue.$toast.success('Subscriber successfully updated!')
                 commit('UPDATE_SUBSCRIBER', res.data)
-            }).catch(err => {
-                console.log(err)
+            }).catch(error => {
+                Vue.$toast.error(error.response.data.message)
+                commit('UPDATE_EDIT_SUBSCRIBER_ERRORS', error.response.data.errors)
             })
         }
     }

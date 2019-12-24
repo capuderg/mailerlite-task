@@ -2040,6 +2040,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "SubscribersList",
@@ -2051,7 +2054,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       editedState: ''
     };
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['subscribers', 'possibleStates'])),
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['subscribers', 'possibleStates', 'getEditSubscriberErrors'])),
   methods: {
     deleteSubscriber: function deleteSubscriber(subscriber) {
       this.$store.dispatch('DELETE_SUBSCRIBER', subscriber);
@@ -2063,6 +2066,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.editedState = subscriber.state;
     },
     submitEditedSubscriber: function submitEditedSubscriber() {
+      this.$store.commit('RESET_EDIT_SUBSCRIBER_ERRORS');
       var data = {
         id: this.editedId,
         email: this.editedEmail,
@@ -38426,6 +38430,9 @@ var render = function() {
                           }
                         ],
                         staticClass: "form-control",
+                        class: {
+                          "is-invalid": _vm.getEditSubscriberErrors.email.length
+                        },
                         attrs: { type: "email", id: "edited-email" },
                         domProps: { value: _vm.editedEmail },
                         on: {
@@ -38436,7 +38443,19 @@ var render = function() {
                             _vm.editedEmail = $event.target.value
                           }
                         }
-                      })
+                      }),
+                      _vm._v(" "),
+                      _vm.getEditSubscriberErrors.email.length
+                        ? _c("div", { staticClass: "invalid-feedback" }, [
+                            _vm._v(
+                              "\n                                " +
+                                _vm._s(
+                                  _vm.getEditSubscriberErrors.email.join(", ")
+                                ) +
+                                "\n                            "
+                            )
+                          ])
+                        : _vm._e()
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "form-group" }, [
@@ -38525,7 +38544,7 @@ var render = function() {
                   "button",
                   {
                     staticClass: "btn btn-primary",
-                    attrs: { type: "button", "data-dismiss": "modal" },
+                    attrs: { type: "button" },
                     on: {
                       click: function($event) {
                         $event.preventDefault()
@@ -52173,7 +52192,17 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_toast_notification__WEBPACK_I
 /* harmony default export */ __webpack_exports__["default"] = (new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
   state: {
     subscribers: [],
+    defaultSubscriberFields: {
+      email: '',
+      name: '',
+      state: ''
+    },
     addSubscriberErrors: {
+      email: '',
+      name: '',
+      state: ''
+    },
+    editSubscriberErrors: {
       email: '',
       name: '',
       state: ''
@@ -52189,6 +52218,9 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_toast_notification__WEBPACK_I
     },
     getAddSubscriberErrors: function getAddSubscriberErrors(state) {
       return state.addSubscriberErrors;
+    },
+    getEditSubscriberErrors: function getEditSubscriberErrors(state) {
+      return state.editSubscriberErrors;
     }
   },
   mutations: {
@@ -52214,22 +52246,24 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_toast_notification__WEBPACK_I
       state.addSubscriberErrors = errors;
     },
     RESET_ADD_SUBSCRIBER_ERRORS: function RESET_ADD_SUBSCRIBER_ERRORS(state) {
-      state.addSubscriberErrors = {
-        email: '',
-        name: '',
-        state: ''
-      };
+      state.addSubscriberErrors = state.defaultSubscriberFields;
+    },
+    UPDATE_EDIT_SUBSCRIBER_ERRORS: function UPDATE_EDIT_SUBSCRIBER_ERRORS(state, errors) {
+      state.editSubscriberErrors = errors;
+    },
+    RESET_EDIT_SUBSCRIBER_ERRORS: function RESET_EDIT_SUBSCRIBER_ERRORS(state) {
+      state.editSubscriberErrors = state.defaultSubscriberFields;
     }
   },
   actions: {
     ADD_SUBSCRIBER: function ADD_SUBSCRIBER(_ref, subscriber) {
       var commit = _ref.commit;
       axios.post('/api/subscribers', subscriber).then(function (res) {
+        vue__WEBPACK_IMPORTED_MODULE_0___default.a.$toast.success('Subscriber successfully added!');
         commit('ADD_SUBSCRIBER', res.data);
       })["catch"](function (error) {
-        console.log(error.response.data);
-        commit('UPDATE_ADD_SUBSCRIBER_ERRORS', error.response.data.errors);
         vue__WEBPACK_IMPORTED_MODULE_0___default.a.$toast.error(error.response.data.message);
+        commit('UPDATE_ADD_SUBSCRIBER_ERRORS', error.response.data.errors);
       });
     },
     GET_SUBSCRIBERS: function GET_SUBSCRIBERS(_ref2) {
@@ -52251,9 +52285,11 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_toast_notification__WEBPACK_I
     UPDATE_SUBSCRIBER: function UPDATE_SUBSCRIBER(_ref4, subscriber) {
       var commit = _ref4.commit;
       axios.put("/api/subscribers/".concat(subscriber.id), subscriber).then(function (res) {
+        vue__WEBPACK_IMPORTED_MODULE_0___default.a.$toast.success('Subscriber successfully updated!');
         commit('UPDATE_SUBSCRIBER', res.data);
-      })["catch"](function (err) {
-        console.log(err);
+      })["catch"](function (error) {
+        vue__WEBPACK_IMPORTED_MODULE_0___default.a.$toast.error(error.response.data.message);
+        commit('UPDATE_EDIT_SUBSCRIBER_ERRORS', error.response.data.errors);
       });
     }
   }

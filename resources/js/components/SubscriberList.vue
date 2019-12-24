@@ -64,7 +64,10 @@
                         <form @submit.prevent="createSubscriber">
                             <div class="form-group">
                                 <label for="edited-email">Email address</label>
-                                <input type="email" class="form-control" id="edited-email" v-model="editedEmail">
+                                <input type="email" class="form-control" :class="{'is-invalid': getEditSubscriberErrors.email.length}" id="edited-email" v-model="editedEmail">
+                                <div class="invalid-feedback" v-if="getEditSubscriberErrors.email.length">
+                                    {{ getEditSubscriberErrors.email.join(', ') }}
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="edited-name">Name</label>
@@ -80,7 +83,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" @click.prevent="submitEditedSubscriber" data-dismiss="modal">Save changes</button>
+                        <button type="button" class="btn btn-primary" @click.prevent="submitEditedSubscriber">Save changes</button>
                     </div>
                 </div>
             </div>
@@ -101,7 +104,7 @@
             }
         },
         computed: {
-            ...mapGetters(['subscribers', 'possibleStates'])
+            ...mapGetters(['subscribers', 'possibleStates', 'getEditSubscriberErrors'])
         },
         methods: {
             deleteSubscriber: function (subscriber) {
@@ -114,6 +117,8 @@
                 this.editedState = subscriber.state
             },
             submitEditedSubscriber: function () {
+                this.$store.commit('RESET_EDIT_SUBSCRIBER_ERRORS')
+
                 let data = {
                     id: this.editedId,
                     email: this.editedEmail,
