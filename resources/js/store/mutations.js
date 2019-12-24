@@ -38,4 +38,26 @@ export default {
             return subscriber
         })
     },
+    DELETE_FIELD(state, field) {
+        state.subscribers.map(subscriber => {
+            if (subscriber.id === field.subscriber_id ) {
+                subscriber.fields.splice(subscriber.fields.indexOf(field), 1)
+            }
+
+            return subscriber
+        })
+    },
+    UPDATE_FIELD(state, field) {
+        state.subscribers.map(subscriber => {
+            if (subscriber.id === field.subscriber_id ) {
+                subscriber.fields.map(existingField => {
+                    if (existingField.id === field.id) {
+                        return Object.assign(existingField, field)
+                    }
+                })
+            }
+
+            return subscriber
+        })
+    },
 }

@@ -2080,6 +2080,46 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "SubscribersList",
@@ -2091,13 +2131,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       editedState: '',
       fieldSubscriberId: 0,
       title: '',
-      type: 'string'
+      type: 'string',
+      editedFieldId: 0,
+      editedTitle: '',
+      editedType: ''
     };
   },
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['subscribers', 'possibleStates', 'getEditSubscriberErrors', 'possibleTypes'])),
   methods: {
     deleteSubscriber: function deleteSubscriber(subscriber) {
       this.$store.dispatch('DELETE_SUBSCRIBER', subscriber);
+    },
+    deleteField: function deleteField(field) {
+      this.$store.dispatch('DELETE_FIELD', field);
     },
     editSubscriber: function editSubscriber(subscriber) {
       this.editedId = subscriber.id;
@@ -2125,6 +2171,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         type: this.type
       };
       this.$store.dispatch('ADD_FIELD', data);
+    },
+    editField: function editField(field) {
+      this.editedFieldId = field.id;
+      this.editedTitle = field.title;
+      this.editedType = field.type;
+    },
+    submitEditedField: function submitEditedField() {
+      var data = {
+        id: this.editedFieldId,
+        title: this.editedTitle,
+        type: this.editedType
+      };
+      this.$store.dispatch('UPDATE_FIELD', data);
     }
   }
 });
@@ -38413,13 +38472,47 @@ var render = function() {
                                     _vm._v(" "),
                                     _c("td", [_vm._v(_vm._s(field.title))]),
                                     _vm._v(" "),
-                                    _c("td", [_vm._v(_vm._s(field.type))])
+                                    _c("td", [_vm._v(_vm._s(field.type))]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _c(
+                                        "a",
+                                        {
+                                          staticClass: "mr-3",
+                                          attrs: { href: "#" },
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              return _vm.deleteField(field)
+                                            }
+                                          }
+                                        },
+                                        [_vm._v("✖")]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "a",
+                                        {
+                                          attrs: {
+                                            href: "#",
+                                            "data-toggle": "modal",
+                                            "data-target": "#editField"
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              return _vm.editField(field)
+                                            }
+                                          }
+                                        },
+                                        [_vm._v("✎")]
+                                      )
+                                    ])
                                   ])
                                 ]
                               }),
                               _vm._v(" "),
                               _c("tr", [
-                                _c("td", { attrs: { colspan: "3" } }, [
+                                _c("td", { attrs: { colspan: "4" } }, [
                                   _c(
                                     "a",
                                     {
@@ -38445,7 +38538,28 @@ var render = function() {
                       )
                     ])
                   : _c("td", [
-                      _vm._v("No fields are defined for this subscriber.")
+                      _c("p", [
+                        _vm._v("No fields are defined for this subscriber.")
+                      ]),
+                      _vm._v(" "),
+                      _c("p", [
+                        _c(
+                          "a",
+                          {
+                            attrs: {
+                              href: "#",
+                              "data-toggle": "modal",
+                              "data-target": "#addField"
+                            },
+                            on: {
+                              click: function($event) {
+                                return _vm.createField(subscriber.id)
+                              }
+                            }
+                          },
+                          [_vm._v("+ Add a field")]
+                        )
+                      ])
                     ])
               ])
             ]
@@ -38755,6 +38869,134 @@ var render = function() {
           ]
         )
       ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "editField",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "exampleModalLabel",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _vm._m(4),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c("form", [
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("label", { attrs: { for: "edited-email" } }, [
+                      _vm._v("Title")
+                    ]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.editedTitle,
+                          expression: "editedTitle"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        type: "email",
+                        id: "edited-title",
+                        required: ""
+                      },
+                      domProps: { value: _vm.editedTitle },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.editedTitle = $event.target.value
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("label", { attrs: { for: "edited-state" } }, [
+                      _vm._v("Type")
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.editedType,
+                            expression: "editedType"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { id: "edited-type" },
+                        on: {
+                          change: function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.editedType = $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          }
+                        }
+                      },
+                      _vm._l(_vm.possibleTypes, function(type) {
+                        return _c("option", [_vm._v(_vm._s(type))])
+                      }),
+                      0
+                    )
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-footer" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary",
+                    attrs: { type: "button", "data-dismiss": "modal" }
+                  },
+                  [_vm._v("Close")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        return _vm.submitEditedField($event)
+                      }
+                    }
+                  },
+                  [_vm._v("Save changes")]
+                )
+              ])
+            ])
+          ]
+        )
+      ]
     )
   ])
 }
@@ -38787,7 +39029,9 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Title")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Type")])
+        _c("th", [_vm._v("Type")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Actions")])
       ])
     ])
   },
@@ -38818,6 +39062,27 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "modal-header" }, [
       _c("h5", { staticClass: "modal-title" }, [_vm._v("Add Field")]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c("h5", { staticClass: "modal-title" }, [_vm._v("Edit Field")]),
       _vm._v(" "),
       _c(
         "button",
@@ -52414,16 +52679,17 @@ __webpack_require__.r(__webpack_exports__);
     var commit = _ref2.commit;
     axios.get('/api/subscribers').then(function (res) {
       commit('SET_SUBSCRIBERS', res.data);
-    })["catch"](function (err) {
-      console.log(err);
+    })["catch"](function (error) {
+      vue__WEBPACK_IMPORTED_MODULE_0___default.a.$toast.error(error.response.data.message);
     });
   },
   DELETE_SUBSCRIBER: function DELETE_SUBSCRIBER(_ref3, subscriber) {
     var commit = _ref3.commit;
     axios["delete"]("/api/subscribers/".concat(subscriber.id)).then(function (res) {
+      vue__WEBPACK_IMPORTED_MODULE_0___default.a.$toast.success('Subscriber successfully deleted!');
       commit('DELETE_SUBSCRIBER', subscriber);
-    })["catch"](function (err) {
-      console.log(err);
+    })["catch"](function (error) {
+      vue__WEBPACK_IMPORTED_MODULE_0___default.a.$toast.error(error.response.data.message);
     });
   },
   UPDATE_SUBSCRIBER: function UPDATE_SUBSCRIBER(_ref4, subscriber) {
@@ -52441,6 +52707,24 @@ __webpack_require__.r(__webpack_exports__);
     axios.post("/api/subscribers/".concat(field.subscriber_id, "/fields"), field).then(function (res) {
       vue__WEBPACK_IMPORTED_MODULE_0___default.a.$toast.success('Field successfully added!');
       commit('ADD_FIELD', res.data);
+    })["catch"](function (error) {
+      vue__WEBPACK_IMPORTED_MODULE_0___default.a.$toast.error(error.response.data.message);
+    });
+  },
+  DELETE_FIELD: function DELETE_FIELD(_ref6, field) {
+    var commit = _ref6.commit;
+    axios["delete"]("/api/fields/".concat(field.id)).then(function (res) {
+      vue__WEBPACK_IMPORTED_MODULE_0___default.a.$toast.success('Field successfully deleted!');
+      commit('DELETE_FIELD', field);
+    })["catch"](function (error) {
+      vue__WEBPACK_IMPORTED_MODULE_0___default.a.$toast.error(error.response.data.message);
+    });
+  },
+  UPDATE_FIELD: function UPDATE_FIELD(_ref7, field) {
+    var commit = _ref7.commit;
+    axios.put("/api/fields/".concat(field.id), field).then(function (res) {
+      vue__WEBPACK_IMPORTED_MODULE_0___default.a.$toast.success('Field successfully updated!');
+      commit('UPDATE_FIELD', res.data);
     })["catch"](function (error) {
       vue__WEBPACK_IMPORTED_MODULE_0___default.a.$toast.error(error.response.data.message);
     });
@@ -52554,6 +52838,28 @@ __webpack_require__.r(__webpack_exports__);
     state.subscribers.map(function (subscriber) {
       if (subscriber.id === field.subscriber_id) {
         subscriber.fields.push(field);
+      }
+
+      return subscriber;
+    });
+  },
+  DELETE_FIELD: function DELETE_FIELD(state, field) {
+    state.subscribers.map(function (subscriber) {
+      if (subscriber.id === field.subscriber_id) {
+        subscriber.fields.splice(subscriber.fields.indexOf(field), 1);
+      }
+
+      return subscriber;
+    });
+  },
+  UPDATE_FIELD: function UPDATE_FIELD(state, field) {
+    state.subscribers.map(function (subscriber) {
+      if (subscriber.id === field.subscriber_id) {
+        subscriber.fields.map(function (existingField) {
+          if (existingField.id === field.id) {
+            return Object.assign(existingField, field);
+          }
+        });
       }
 
       return subscriber;

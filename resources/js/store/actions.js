@@ -13,15 +13,16 @@ export default {
     GET_SUBSCRIBERS({commit}) {
         axios.get('/api/subscribers').then(res => {
             commit('SET_SUBSCRIBERS', res.data)
-        }).catch(err => {
-            console.log(err)
+        }).catch(error => {
+            Vue.$toast.error(error.response.data.message)
         })
     },
     DELETE_SUBSCRIBER({commit}, subscriber) {
         axios.delete(`/api/subscribers/${subscriber.id}`).then(res => {
+            Vue.$toast.success('Subscriber successfully deleted!')
             commit('DELETE_SUBSCRIBER', subscriber)
-        }).catch(err => {
-            console.log(err)
+        }).catch(error => {
+            Vue.$toast.error(error.response.data.message)
         })
     },
     UPDATE_SUBSCRIBER({commit}, subscriber) {
@@ -38,6 +39,22 @@ export default {
             Vue.$toast.success('Field successfully added!')
             commit('ADD_FIELD', res.data)
         }).catch((error) => {
+            Vue.$toast.error(error.response.data.message)
+        })
+    },
+    DELETE_FIELD({commit}, field) {
+        axios.delete(`/api/fields/${field.id}`).then(res => {
+            Vue.$toast.success('Field successfully deleted!')
+            commit('DELETE_FIELD', field)
+        }).catch(error => {
+            Vue.$toast.error(error.response.data.message)
+        })
+    },
+    UPDATE_FIELD({commit}, field) {
+        axios.put(`/api/fields/${field.id}`, field).then(res => {
+            Vue.$toast.success('Field successfully updated!')
+            commit('UPDATE_FIELD', res.data)
+        }).catch(error => {
             Vue.$toast.error(error.response.data.message)
         })
     },

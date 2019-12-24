@@ -31,6 +31,7 @@
                                         <th>Field ID</th>
                                         <th>Title</th>
                                         <th>Type</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -39,17 +40,24 @@
                                             <td>{{ field.id }}</td>
                                             <td>{{ field.title }}</td>
                                             <td>{{ field.type }}</td>
+                                            <td>
+                                                <a href="#" @click.prevent="deleteField(field)" class="mr-3">&#10006;</a>
+                                                <a href="#" data-toggle="modal" data-target="#editField" @click="editField(field)">&#9998;</a>
+                                            </td>
                                         </tr>
                                     </template>
                                     <tr>
-                                        <td colspan="3">
+                                        <td colspan="4">
                                             <a href="#" data-toggle="modal" data-target="#addField" @click="createField(subscriber.id)">+ Add a field</a>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
                         </td>
-                        <td v-else>No fields are defined for this subscriber.</td>
+                        <td v-else>
+                            <p>No fields are defined for this subscriber.</p>
+                            <p><a href="#" data-toggle="modal" data-target="#addField" @click="createField(subscriber.id)">+ Add a field</a></p>
+                        </td>
                     </tr>
                 </template>
             </tbody>
@@ -94,7 +102,7 @@
             </div>
         </div>
 
-        <!-- Field Modal -->
+        <!-- Add Field Modal -->
         <div class="modal fade" id="addField" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -125,6 +133,38 @@
                 </div>
             </div>
         </div>
+
+        <!-- Edit Field Modal -->
+        <div class="modal fade" id="editField" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit Field</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="edited-email">Title</label>
+                                <input type="email" class="form-control" id="edited-title" v-model="editedTitle" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="edited-state">Type</label>
+                                <select class="form-control" id="edited-type" v-model="editedType">
+                                    <option v-for="type in possibleTypes">{{ type }}</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" @click.prevent="submitEditedField">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 <script>
@@ -140,7 +180,10 @@
                 editedState: '',
                 fieldSubscriberId: 0,
                 title: '',
-                type: 'string'
+                type: 'string',
+                editedFieldId: 0,
+                editedTitle: '',
+                editedType: '',
             }
         },
         computed: {
@@ -149,6 +192,9 @@
         methods: {
             deleteSubscriber: function (subscriber) {
                 this.$store.dispatch('DELETE_SUBSCRIBER', subscriber)
+            },
+            deleteField: function (field) {
+                this.$store.dispatch('DELETE_FIELD', field)
             },
             editSubscriber: function (subscriber) {
                 this.editedId = subscriber.id
@@ -179,7 +225,21 @@
                 };
 
                 this.$store.dispatch('ADD_FIELD', data)
-            }
+            },
+            editField: function (field) {
+                this.editedFieldId = field.id
+                this.editedTitle = field.title
+                this.editedType = field.type
+            },
+            submitEditedField: function () {
+                const data = {
+                    id: this.editedFieldId,
+                    title: this.editedTitle,
+                    type: this.editedType,
+                };
+
+                this.$store.dispatch('UPDATE_FIELD', data)
+            },
         }
     };
 </script>
